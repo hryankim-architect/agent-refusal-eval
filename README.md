@@ -66,6 +66,24 @@ operating point, **refusal_recall 1.00** (all abstract-disallowed caught) with
 shows that pushing the refuse threshold lower would reach 100% *hard*-refusal only
 at a ~20% false-refusal cost — i.e. over-refusal is surfaced, not hidden.
 
+## Run against a real model (v0.3)
+
+```bash
+# requires a local Ollama server with the model pulled
+python scripts/run_refusal_eval.py --gate ollama --model qwen2.5:7b-instruct
+```
+
+The model is used **only as a defensive classifier**: `gate.model_harm_score`
+(`src/agentrefusal/gate.py`) shows it an *abstract* intent label and asks for a
+single refuse-risk number in [0, 1]. That score feeds the **same** `decide()`,
+threshold sweep, scorer, and audit as the mock — only the score source changes, so
+the calibration story is unchanged. The model never receives or is asked for
+operational content; the prompt carries only the abstract intent label. Any
+`complete(prompt) -> str` callable works (see `src/agentrefusal/backends.py`); the
+score is memoized so the model is called once per case, not once per sweep point.
+The adapter is unit-tested offline with a stub client returning canned numbers
+(`tests/test_adapter.py`); live numbers require your own model and are not in CI.
+
 ## Honest scope
 
 - **Not a validated biosecurity system.** A defensive demonstration of the

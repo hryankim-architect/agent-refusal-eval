@@ -1,7 +1,7 @@
 [project]
 name = "agent-refusal-eval"
-version = "0.2.0"
-description = "Clean-room methodology harness that measures whether an agent's pre-tool-call screening gate correctly refuses/escalates abstract dual-use intent without over-refusing benign work. Defensive; abstract category labels only; no operational hazard content."
+version = "0.3.0"
+description = "Clean-room methodology harness that measures whether an agent's pre-tool-call screening gate correctly refuses/escalates abstract dual-use intent without over-refusing benign work, with bootstrap CIs and a threshold sweep. Ships a mock gate AND a real-model gate adapter (the model scores an abstract intent's refuse-risk, feeding the same decide/sweep/scorer). Defensive; abstract category labels only; no operational hazard content."
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "H. Ryan Kim" }]

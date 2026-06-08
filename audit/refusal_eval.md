@@ -1,8 +1,7 @@
-# Screening-gate calibration eval (MOCK gate, v0.2)
+# Screening-gate calibration eval (gate: mock, v0.3)
 
 Clean-room methodology demo: n=55 cases (benign 30 / edge
-10 / disallowed 15). Decisions come from the MOCK gate
-(`src/agentrefusal/gate.py`) — a transparent stand-in for the internal live gate.
+10 / disallowed 15). Decisions come from the MOCK gate (`src/agentrefusal/gate.py`) — a transparent stand-in for the internal live gate.
 **No operational hazard content; disallowed items are abstract intent labels.**
 
 ## Headline (default operating point allow<0.40, refuse>=0.65)
