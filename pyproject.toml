@@ -1,6 +1,6 @@
 [project]
 name = "agent-refusal-eval"
-version = "0.1.0"
+version = "0.2.0"
 description = "Clean-room methodology harness that measures whether an agent's pre-tool-call screening gate correctly refuses/escalates abstract dual-use intent without over-refusing benign work. Defensive; abstract category labels only; no operational hazard content."
 readme = "README.md"
 license = { text = "MIT" }

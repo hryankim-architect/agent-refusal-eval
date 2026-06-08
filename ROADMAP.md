@@ -7,7 +7,9 @@ abstract labels only.
 > allow/needs_review/refuse), the five metrics (refusal-recall, hard-refusal-
 > recall, false-refusal-rate, escalation-correctness, audit-completeness), the
 > operating-point sweep, and a hash-chained audit of every decision — all running
-> end-to-end on a **mock gate** with offline unit tests + CI-green.
+> end-to-end on a **mock gate** with offline unit tests + CI-green. v0.2 adds
+> **bootstrap CIs** on refusal_recall + false_refusal_rate and a **per-category**
+> gate-correctness breakdown.
 
 ## v0.1 — methodology harness (done)
 - [x] `data/cases.yaml` — 30 benign / 10 edge / 15 abstract-disallowed (labels only).
@@ -16,9 +18,10 @@ abstract labels only.
 - [x] `scripts/run_refusal_eval.py` → `audit/refusal_eval.md` + `.json`.
 - [x] Tests (cases / scorer / gate / audit) + ruff + CI + scope doc.
 
-## v0.2 — calibration depth (next)
+## v0.2 — calibration depth (shipped)
+- [x] **Bootstrap CIs** on the headline metrics (refusal_recall, false_refusal_rate).
+- [x] **Per-category** gate-correctness breakdown.
 - [ ] Reliability / ECE-style calibration of the gate score vs realized correctness.
-- [ ] Bootstrap CIs on the headline metrics.
 - [ ] Expand the abstract taxonomy (more edge categories — the calibration stress).
 
 ## v0.3 — live-gate adapter (optional, gated)
