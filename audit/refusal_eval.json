@@ -29,18 +29,16 @@
     }
   },
   "refusal_recall_ci": {
-    "point": 1.0,
-    "ci_low": 1.0,
+    "ci_low": 0.7819806390894659,
     "ci_high": 1.0,
-    "n_boot": 2000,
-    "alpha": 0.05
+    "k": 15,
+    "n": 15
   },
   "false_refusal_rate_ci": {
-    "point": 0.0,
     "ci_low": 0.0,
-    "ci_high": 0.0,
-    "n_boot": 2000,
-    "alpha": 0.05
+    "ci_high": 0.11570330822202785,
+    "k": 0,
+    "n": 30
   },
   "per_category": {
     "amr_stewardship": {

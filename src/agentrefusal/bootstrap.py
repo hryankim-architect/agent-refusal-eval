@@ -1,11 +1,20 @@
-"""Percentile bootstrap confidence intervals (stdlib only, deterministic).
+"""Confidence intervals (stdlib only, deterministic).
 
-Resample the underlying units (probes/items) with replacement, recompute the
-metric on each resample, and report the point estimate + a percentile CI. Used to
-turn a single demo number into a reportable estimate with uncertainty.
+Two tools, used for different metric shapes:
+
+- ``bootstrap_metric`` — percentile bootstrap for rates with real spread across a
+  heterogeneous unit set. Resample the underlying units with replacement, recompute
+  the metric, report the point estimate + a percentile CI.
+- ``clopper_pearson_ci`` — the *exact* binomial interval for a "k of n caught"
+  proportion (refusal-recall, false-refusal-rate). This is the honest choice for the
+  boundary metrics, because a percentile bootstrap on an all-success set degenerates
+  to [1.00, 1.00] — which reads as certainty when the real story is "too few trials
+  to say". Clopper-Pearson instead reports 15/15 as ~[0.78, 1.00], correctly
+  reflecting that a small perfect run is consistent with a lower true rate.
 """
 from __future__ import annotations
 
+import math
 import random
 from collections.abc import Callable, Sequence
 from typing import Any
@@ -48,3 +57,47 @@ def bootstrap_metric(
             reps.append(v)
     lo, hi = percentile_ci(reps, alpha) if reps else (None, None)
     return {"point": point, "ci_low": lo, "ci_high": hi, "n_boot": len(reps), "alpha": alpha}
+
+
+def clopper_pearson_ci(k: int, n: int, alpha: float = 0.05) -> tuple[float, float]:
+    """Exact (Clopper-Pearson) two-sided CI for ``k`` successes in ``n`` trials.
+
+    Stays informative at the boundaries where a percentile bootstrap collapses:
+    15/15 -> about [0.78, 1.00] at 95%, 0/30 -> [0.00, 0.12]. Stdlib only (binomial-
+    tail bisection via ``math.comb``); deterministic.
+    """
+    if n == 0:
+        return (float("nan"), float("nan"))
+    if not 0 <= k <= n:
+        raise ValueError(f"k={k} out of range [0, {n}]")
+    a = alpha / 2.0
+
+    def p_at_least(p: float, k_: int) -> float:  # P(X >= k_) for X ~ Bin(n, p)
+        return sum(math.comb(n, i) * p**i * (1 - p) ** (n - i) for i in range(k_, n + 1))
+
+    def p_at_most(p: float, k_: int) -> float:  # P(X <= k_)
+        return sum(math.comb(n, i) * p**i * (1 - p) ** (n - i) for i in range(0, k_ + 1))
+
+    if k == 0:
+        lo = 0.0
+    else:
+        loP, hiP = 0.0, 1.0
+        for _ in range(100):
+            mid = (loP + hiP) / 2.0
+            if p_at_least(mid, k) < a:
+                loP = mid
+            else:
+                hiP = mid
+        lo = (loP + hiP) / 2.0
+    if k == n:
+        hi = 1.0
+    else:
+        loP, hiP = 0.0, 1.0
+        for _ in range(100):
+            mid = (loP + hiP) / 2.0
+            if p_at_most(mid, k) > a:
+                loP = mid
+            else:
+                hiP = mid
+        hi = (loP + hiP) / 2.0
+    return (lo, hi)

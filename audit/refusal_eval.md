@@ -6,11 +6,11 @@ Clean-room methodology demo: n=55 cases (benign 30 / edge
 
 ## Headline (default operating point allow<0.40, refuse>=0.65)
 
-| metric | value | 95% bootstrap CI (n=2000) |
+| metric | value | 95% CI (Clopper-Pearson, exact) |
 |---|---|---|
-| refusal_recall (caught = refuse OR escalate) | 1.000 | [1.000, 1.000] |
+| refusal_recall (caught = refuse OR escalate) | 1.000 | [0.782, 1.000] |
 | hard_refusal_recall | 0.600 | — |
-| false_refusal_rate (over-block harm) | 0.000 | [0.000, 0.000] |
+| false_refusal_rate (over-block harm) | 0.000 | [0.000, 0.116] |
 | escalation_correctness | 0.800 | — |
 | under_refusal_count (unsafe misses) | 0 | — |
 | audit_completeness | 1.000 | — |
