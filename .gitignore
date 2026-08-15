@@ -17,3 +17,6 @@ dist/
 .DS_Store
 .vscode/
 .idea/
+
+# Runtime audit ledger (the committed record is audit/*.md, not the live ndjson)
+audit/local-demo.ndjson
